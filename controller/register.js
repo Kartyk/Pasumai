@@ -16,6 +16,12 @@ let fileWrite = async (url, image) => {
             encoding: 'base64'
         });
 
+        // fs.writeFile(url, image, {
+        //     encoding: 'base64'
+        // }, function (err) {
+        //     console.log("IMAGE WRITING ERROR >>>>>>>>>>>>>>> ", err)
+        // });
+
         return storeFile;
 
     } catch (err) {
@@ -32,11 +38,11 @@ register.prototype.registerUser = async (req, res) => {
 
     try {
 
-        console.log("DATA", req.body.data);
+        console.log("REQUEST DATA >>>>>>>>>>>>>>>>>>> ", JSON.stringify(req.body.data));
 
         let getMobileNo = _.map(req.body.data, 'mobile');
 
-        console.log("MOBILE NUMBER", getMobileNo);
+        console.log("MOBILE NUMBER >>>>>>>>>>>>>>>>>>> ", getMobileNo);
 
         let findMobileExist = await user.find({
             mobile: {
@@ -44,7 +50,7 @@ register.prototype.registerUser = async (req, res) => {
             }
         });
 
-        console.log("CHECK MOBILE EXISTS", findMobileExist.length);
+        console.log("CHECK MOBILE EXISTS >>>>>>>>>>>>>>>>>>> ", findMobileExist.length);
 
         var actualData;
 
@@ -52,51 +58,67 @@ register.prototype.registerUser = async (req, res) => {
 
             actualData = _.differenceBy(req.body.data, findMobileExist, 'mobile');
 
-            console.log("ACTUAL DATA LENGTH", actualData.length);
+            console.log("ACTUAL DATA LENGTH >>>>>>>>>>>>>>>>>>> ", actualData.length);
 
             for (let i = 0; i < actualData.length; i++) {
 
                 if (actualData[i].imageUrl) {
 
-                    let url = `public/PasumaiThakkam/User/${actualData[i].imageProfileName}.png`;
+                    var imgUrl = actualData[i].imageUrl;
 
-                    let image = actualData[i].imageUrl;
+                    var imageName = imgUrl.substring(imgUrl.lastIndexOf("/"));
+
+                    let url = `public/PasumaiThakkam/User${imageName}`;
+
+                    let image = actualData[i].imageData;
 
                     let storeFile = fileWrite(url, image);
 
                     actualData[i].imageUrl = url;
+
+                    console.log("actualData[i].imageUrl ", actualData[i].imageUrl);
                 }
 
-                var landDetails = actualData[i].landDetails;
+                var landDetails = actualData[i].landArrayList;
 
                 for (let j = 0; j < landDetails.length; j++) {
 
                     if (landDetails[j].imagePattaUrl) {
 
-                        let url = `public/PasumaiThakkam/Patta/${landDetails[j].imagePattaName}.png`;
+                        var pattaImgUrl = landDetails[j].imagePattaUrl;
 
-                        let image = landDetails[j].imagePattaUrl;
+                        var pattaImageName = pattaImgUrl.substring(pattaImgUrl.lastIndexOf("/"));
+
+                        let url = `public/PasumaiThakkam/Patta${pattaImageName}`;
+
+                        let image = landDetails[j].imagePattaData;
 
                         let storeFile = fileWrite(url, image);
-
-                        actualData[i].landDetails[j].imagePattaUrl = url;
+            
+                        actualData[i].landArrayList[j].imagePattaUrl = url;
+                      
                     }
 
                     if (landDetails[j].imageLocationUrl) {
 
-                        let image = landDetails[j].imageLocationUrl;
+                        var locationImgUrl = landDetails[j].imageLocationUrl;
 
-                        let url = `public/PasumaiThakkam/Location/${landDetails[j].imageLocationName}.png`;
+                        var locationImageName = locationImgUrl.substring(locationImgUrl.lastIndexOf("/"));
+
+                        let image = landDetails[j].imageLocationData;
+
+                        let url = `public/PasumaiThakkam/Location${locationImageName}`;
 
                         let storeFile = fileWrite(url, image);
 
-                        actualData[i].landDetails[j].imageLocationUrl = url;
+                        actualData[i].landArrayList[j].imageLocationUrl = url;
+                                                     
                     }
                 }
             }
         }
 
-        console.log("ACTUAL DATA>>>>>>>>>> ", actualData);
+        console.log("ACTUAL DATA >>>>>>>>>>>>>>>>>>> ", actualData);
 
         let result = await user.insertMany(actualData);
 

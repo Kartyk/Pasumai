@@ -35,7 +35,7 @@ const UsersSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    landDetails: [{
+    landArrayList: [{
         imagePattaUrl: String,
         imageLocationUrl: String,
         landType: String,
