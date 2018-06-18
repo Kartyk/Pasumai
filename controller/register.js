@@ -129,7 +129,7 @@ register.prototype.registerUser = async (req, res) => {
 
     } catch (err) {
 
-        console.log("INSERT ERROR", err);
+        console.log("INSERT ERROR >>>>>>>>>>>>>>>>>>> ", err);
 
         res.send({
             status: 0,
