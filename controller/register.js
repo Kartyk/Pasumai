@@ -52,6 +52,8 @@ register.prototype.registerUser = async (req, res) => {
 
         console.log("CHECK MOBILE EXISTS >>>>>>>>>>>>>>>>>>> ", findMobileExist.length);
 
+        console.log("CHECK MOBILE EXISTS >>>>>>>>>>>>>>>>>>> ", JSON.stringify(findMobileExist));
+
         var actualData;
 
         if (findMobileExist.length >= 0) {
@@ -61,6 +63,8 @@ register.prototype.registerUser = async (req, res) => {
             console.log("ACTUAL DATA LENGTH >>>>>>>>>>>>>>>>>>> ", actualData.length);
 
             for (let i = 0; i < actualData.length; i++) {
+
+                actualData[i].syncStatus = "1";
 
                 if (actualData[i].imageUrl) {
 
@@ -94,9 +98,9 @@ register.prototype.registerUser = async (req, res) => {
                         let image = landDetails[j].imagePattaData;
 
                         let storeFile = fileWrite(url, image);
-            
+
                         actualData[i].landArrayList[j].imagePattaUrl = url;
-                      
+
                     }
 
                     if (landDetails[j].imageLocationUrl) {
@@ -112,9 +116,11 @@ register.prototype.registerUser = async (req, res) => {
                         let storeFile = fileWrite(url, image);
 
                         actualData[i].landArrayList[j].imageLocationUrl = url;
-                                                     
+
                     }
                 }
+
+                findMobileExist.push(actualData[i]);
             }
         }
 
