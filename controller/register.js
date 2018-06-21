@@ -16,12 +16,6 @@ let fileWrite = async (url, image) => {
             encoding: 'base64'
         });
 
-        // fs.writeFile(url, image, {
-        //     encoding: 'base64'
-        // }, function (err) {
-        //     console.log("IMAGE WRITING ERROR >>>>>>>>>>>>>>> ", err)
-        // });
-
         return storeFile;
 
     } catch (err) {
