@@ -41,8 +41,6 @@ app.use(urlencodedParser);
 
 app.post('/pasumaiThakkam/api/createUser', user.registerUser);
 
-app.post('/showData', user.showUser);
-
 let port = 4000;
 
 app.listen(port, () => console.log(`The server is running at ${port}`));
